@@ -1,16 +1,23 @@
 let csvData = [];
 
-const subjectCredits = {
-  "211501": 4, "212209": 4, "212211": 2,
-  "213601": 4, "213603": 4, "213604": 2,
-  "213606": 2, "213709": 4, "213711": 2
+const subjects = {
+  "223601": ["Probability Distribution", 4],
+  "223603": ["Sampling Technique", 4],
+  "223605": ["Linear Algebra", 4],
+  "223606": ["Lab-3: Probability Distribution and Sampling Technique", 2],
+  "223608": ["Lab-4: Linear algebra", 2],
+  "223707": ["Calculus- II", 4],
+  "223708": ["Math Lab (Practical)", 2],
+  "222211": ["Money, Banking and Public finance", 4],
+  "222213": ["Bangladesh Economy", 2],
+  "221109": ["English (Compulsory)", 0],
 };
 
 const gradePoints = {
   "A+": 4.0, "A": 3.75, "A-": 3.5,
   "B+": 3.25, "B": 3.0, "B-": 2.75,
   "C+": 2.5, "C": 2.25, "D": 2.0,
-  "Fail": 0.0, "F": 0.0
+  "Fail": 0.0, "F": 0.0, "Pass": 0.0
 };
 
 function parseCSV(text) {
@@ -60,12 +67,17 @@ function searchResult() {
     <p><strong>Roll:</strong> ${student.Roll}</p>
     <p><strong>Registration:</strong> ${student.Registration}</p>
     <table>
-      <tr><th>Subject Code</th><th>Grade</th><th>Credit</th></tr>
+      <tr>
+        <th>Code</th>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Credit</th>
+      </tr>
   `;
 
-  for (let code in subjectCredits) {
+  for (let code in subjects) {
+    const [subjectName, credit] = subjects[code];
     const grade = (student[code] || "N/A").trim();
-    const credit = subjectCredits[code];
     const point = gradePoints.hasOwnProperty(grade) ? gradePoints[grade] : 0;
 
     totalCredits += credit;
@@ -76,7 +88,14 @@ function searchResult() {
       failCount++;
     }
 
-    table += `<tr><td>${code}</td><td>${grade}</td><td>${credit}</td></tr>`;
+    table += `
+      <tr>
+        <td>${code}</td>
+        <td>${subjectName}</td>
+        <td>${grade}</td>
+        <td>${credit}</td>
+      </tr>
+    `;
   }
 
   const cgpa = (weightedScore / totalCredits).toFixed(2);
